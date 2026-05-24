@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "flails",
+  "version": "${version}",
+  "name": "flails",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/flails/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "ingobeans.flails.flails.Main"
+    ]
+  },
+  "mixins": [
+    "flails.mixins.json"
+  ],
+  "depends": {
+    "minecraft": "~26.1",
+    "fabric-api": "*"
+  }
+}
