@@ -11,6 +11,7 @@ public class Main implements ModInitializer {
 	@Override
 	public void onInitialize() {
         ModItems.initialize();
+        ModEntityTypes.registerModEntityTypes();
         LOGGER.info("flails loaded!!!!");
 	}
 }

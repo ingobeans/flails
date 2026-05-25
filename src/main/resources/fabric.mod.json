@@ -12,7 +12,8 @@
   "entrypoints": {
     "main": [
       "ingobeans.flails.flails.Main"
-    ]
+    ],
+    "client": ["ingobeans.flails.flails.Client"]
   },
   "mixins": [
     "flails.mixins.json"
