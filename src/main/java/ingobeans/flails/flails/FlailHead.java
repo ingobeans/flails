@@ -47,13 +47,8 @@ public class FlailHead extends Entity {
     public static class FlailHeadEntityRenderState extends LivingEntityRenderState {
     }
     public static class FlailHeadEntityModel extends EntityModel<FlailHeadEntityRenderState> {
-        private final ModelPart head;
-
-        //:::dancing_animation
         public FlailHeadEntityModel(ModelPart root) {
-            //:::dancing_animation
             super(root);
-            this.head = root.getChild(PartNames.HEAD);
         }
         public static LayerDefinition createBodyLayer() {
             MeshDefinition meshdefinition = new MeshDefinition();
