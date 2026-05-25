@@ -7,7 +7,7 @@ import net.minecraft.resources.Identifier;
 
 public class FlailHeadEntityRenderer extends EntityRenderer<FlailHead, FlailHead.FlailHeadEntityRenderState> {
     public FlailHeadEntityRenderer(EntityRendererProvider.Context context) {
-        super(context); // 0.375 shadow radius
+        super(context);
     }
 
     @Override

@@ -19,10 +19,31 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
-public class FlailHead extends AbstractHurtingProjectile {
-    protected FlailHead(EntityType<? extends AbstractHurtingProjectile> type, Level level) {
-        super(type, level);
+public class FlailHead extends Entity {
+    public FlailHead(EntityType<FlailHead> flailHeadEntityType, Level level) {
+        super(flailHeadEntityType,level);
     }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder entityData) {
+        
+    }
+
+    @Override
+    public boolean hurtServer(ServerLevel level, DamageSource source, float damage) {
+        return false;
+    }
+
+    @Override
+    protected void readAdditionalSaveData(ValueInput input) {
+
+    }
+
+    @Override
+    protected void addAdditionalSaveData(ValueOutput output) {
+
+    }
+
     public static class FlailHeadEntityRenderState extends LivingEntityRenderState {
     }
     public static class FlailHeadEntityModel extends EntityModel<FlailHeadEntityRenderState> {
