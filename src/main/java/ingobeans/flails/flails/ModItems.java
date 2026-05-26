@@ -2,12 +2,14 @@ package ingobeans.flails.flails;
 
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.component.UseEffects;
 
 import java.util.function.Function;
 
@@ -29,5 +31,7 @@ public class ModItems {
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
                 .register((creativeTab) -> creativeTab.accept(ModItems.FLAIL));
     }
-    public static final Item FLAIL = register("flail", Item::new, new Item.Properties());
+    public static final Item FLAIL = register("flail", Flail::new, new Item.Properties().component(
+            DataComponents.USE_EFFECTS, new UseEffects(true, true, 0.4F))
+    );
 }

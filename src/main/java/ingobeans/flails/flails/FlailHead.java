@@ -15,12 +15,14 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.hurtingprojectile.AbstractHurtingProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
 public class FlailHead extends Entity {
+    public Player owner;
     public FlailHead(EntityType<FlailHead> flailHeadEntityType, Level level) {
         super(flailHeadEntityType,level);
     }
@@ -43,6 +45,15 @@ public class FlailHead extends Entity {
     @Override
     protected void addAdditionalSaveData(ValueOutput output) {
 
+    }
+    @Override
+    public void tick() {
+        super.tick();
+        if (!level().isClientSide()) {
+            if (this.owner == null) {
+                this.discard();
+            }
+        }
     }
 
     public static class FlailHeadEntityRenderState extends EntityRenderState {

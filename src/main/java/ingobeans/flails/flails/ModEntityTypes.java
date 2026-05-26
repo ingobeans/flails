@@ -14,7 +14,7 @@ public class ModEntityTypes {
     public static final EntityType<FlailHead> FLAIL_HEAD = register(
             "flail_head",
             EntityType.Builder.<FlailHead>of(FlailHead::new, MobCategory.MISC)
-                    .sized(0.75f, 1.75f)
+                    .sized(0.5f, 0.5f)
     );
 
     private static <T extends Entity> EntityType<T> register(String name, EntityType.Builder<T> builder) {
