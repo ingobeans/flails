@@ -5,6 +5,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -31,12 +32,12 @@ public class Flail extends Item {
     }
     @Override
     public void onUseTick(final Level level, final LivingEntity livingEntity, final ItemStack itemStack, final int ticksRemaining) {
-        if (level instanceof ServerLevel serverLevel) {
+        /*if (level instanceof ServerLevel serverLevel) {
             float range = 3.0f;
             this.headAngle -= 0.16f;
             Vec3 newPos = livingEntity.position().add(new Vec3(Math.cos(this.headAngle) * range,0.0f,Math.sin(this.headAngle) * range));
             this.activeHead.setPos(newPos);
-        }
+        }*/
     }
     @Override
     public InteractionResult use(Level level, Player user, InteractionHand hand) {
@@ -45,7 +46,7 @@ public class Flail extends Item {
 
         if (level instanceof ServerLevel serverLevel) {
             FlailHead flailHead = new FlailHead(ModEntityTypes.FLAIL_HEAD, serverLevel);
-            flailHead.owner = user;
+            flailHead.setOwner(EntityReference.of(user));
             flailHead.setPos(user.position());
             serverLevel.addFreshEntity(flailHead);
             this.activeHead = flailHead;

@@ -1,35 +1,38 @@
 package ingobeans.flails.flails;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.PartNames;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
-import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.hurtingprojectile.AbstractHurtingProjectile;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.Optional;
 
 public class FlailHead extends Entity {
-    public Player owner;
+    private static final EntityDataAccessor<Optional<EntityReference<LivingEntity>>> OWNER =
+            SynchedEntityData.defineId(FlailHead.class, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
+    public float angle;
+
     public FlailHead(EntityType<FlailHead> flailHeadEntityType, Level level) {
         super(flailHeadEntityType,level);
     }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder entityData) {
-        
+        entityData.define(OWNER, Optional.empty());
     }
 
     @Override
@@ -42,6 +45,13 @@ public class FlailHead extends Entity {
 
     }
 
+    public void setOwner(EntityReference<LivingEntity> owner) {
+        entityData.set(OWNER, Optional.of(owner));
+    }
+    public Optional<EntityReference<LivingEntity>> getOwner() {
+        return entityData.get(OWNER);
+    }
+
     @Override
     protected void addAdditionalSaveData(ValueOutput output) {
 
@@ -49,11 +59,17 @@ public class FlailHead extends Entity {
     @Override
     public void tick() {
         super.tick();
-        if (!level().isClientSide()) {
-            if (this.owner == null) {
-                this.discard();
-            }
+        Vec3 orbitPos;
+        if (getOwner().isEmpty()) {
+            this.discard();
+            return;
         }
+        Level l = level();
+        orbitPos = getOwner().get().getEntity(l, LivingEntity.class).position();
+        float range = 3.0f;
+        this.angle -= 0.3f;
+        Vec3 newPos = orbitPos.add(new Vec3(Math.cos(this.angle) * range,0.0f,Math.sin(this.angle) * range));
+        this.setPos(newPos);
     }
 
     public static class FlailHeadEntityRenderState extends EntityRenderState {
