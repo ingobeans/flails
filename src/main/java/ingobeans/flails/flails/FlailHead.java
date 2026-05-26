@@ -89,9 +89,7 @@ public class FlailHead extends Entity {
         this.setPos(newPos);
     }
 
-    public static class FlailHeadEntityRenderState extends EntityRenderState {
-    }
-    public static class FlailHeadEntityModel extends EntityModel<FlailHeadEntityRenderState> {
+    public static class FlailHeadEntityModel extends EntityModel<FlailHeadRenderState> {
         public FlailHeadEntityModel(ModelPart root) {
             super(root);
         }
