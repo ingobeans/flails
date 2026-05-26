@@ -14,6 +14,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -65,9 +66,25 @@ public class FlailHead extends Entity {
             return;
         }
         Level l = level();
-        orbitPos = getOwner().get().getEntity(l, LivingEntity.class).position();
+        Player owner = (Player)getOwner().get().getEntity(l, LivingEntity.class);
+        if (owner == null) {
+            this.discard();
+            return;
+        }
+        if (owner.getUseItem().getItem() instanceof Flail flail) {
+            if (!l.isClientSide()) {
+                if (flail.activeHead != this) {
+                    this.discard();
+                    return;
+                }
+            }
+        } else {
+            this.discard();
+            return;
+        }
+        orbitPos = owner.position();
         float range = 3.0f;
-        this.angle -= 0.3f;
+        this.angle -= 0.2f;
         Vec3 newPos = orbitPos.add(new Vec3(Math.cos(this.angle) * range,0.0f,Math.sin(this.angle) * range));
         this.setPos(newPos);
     }
