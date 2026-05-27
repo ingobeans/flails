@@ -1,0 +1,43 @@
+{
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "flails:item/held_flail",
+		"particle": "flails:item/held_flail"
+	},
+	"elements": [
+		{
+			"from": [7, 0, 7],
+			"to": [9, 11, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 0, 7]},
+			"faces": {
+				"north": {"uv": [0, 6, 2, 15], "texture": "#0"},
+				"east": {"uv": [0, 6, 2, 15], "texture": "#0"},
+				"south": {"uv": [0, 6, 2, 15], "texture": "#0"},
+				"west": {"uv": [0, 6, 2, 15], "texture": "#0"},
+				"up": {"uv": [0, 5, 2, 7], "texture": "#0"},
+				"down": {"uv": [11, 3, 13, 5], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 3.25, 1.5]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 3.25, 1.5]
+		},
+		"firstperson_righthand": {
+			"rotation": [-31, 0, 0],
+			"translation": [0, 3.75, 0]
+		},
+		"firstperson_lefthand": {
+			"rotation": [-31, 0, 0],
+			"translation": [0, 3.75, 0]
+		},
+		"head": {
+			"rotation": [-34, 0, 0],
+			"translation": [0, 10.5, -8.75]
+		}
+	}
+}

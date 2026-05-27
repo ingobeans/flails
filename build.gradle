@@ -11,10 +11,20 @@ loom {
 	}
 }
 
+repositories {
+    mavenCentral()
+    maven {
+        name = "RedlanceMinecraft"
+        url = "https://repo.redlance.org/public"
+    }
+}
+
+
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+    implementation "com.zigythebird.playeranim:PlayerAnimationLibFabric:1.2.3+mc.26.1"
 }
 
 processResources {

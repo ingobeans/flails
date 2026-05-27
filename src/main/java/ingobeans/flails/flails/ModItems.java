@@ -31,7 +31,8 @@ public class ModItems {
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
                 .register((creativeTab) -> creativeTab.accept(ModItems.FLAIL));
     }
-    public static final Item FLAIL = register("flail", Flail::new, new Item.Properties().component(
+    public static final Item FLAIL = register("flail", Flail::new, new Item.Properties().stacksTo(1).component(
             DataComponents.USE_EFFECTS, new UseEffects(true, true, 0.4F))
     );
+    public static final Item FLAIL_3D = register("flail_3d", Item::new, new Item.Properties());
 }
