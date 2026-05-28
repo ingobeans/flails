@@ -2,6 +2,7 @@ package ingobeans.flails.flails;
 
 import com.zigythebird.playeranim.animation.PlayerAnimationController;
 import com.zigythebird.playeranim.api.PlayerAnimationAccess;
+import com.zigythebird.playeranimcore.animation.layered.modifier.SpeedModifier;
 import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonConfiguration;
 import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonMode;
 import net.minecraft.server.level.ServerLevel;
@@ -22,7 +23,7 @@ public class Flail extends Item {
         super(properties);
     }
     public FlailHead activeHead;
-    public float headAngle = 0.0f;
+    public float rotationsPerSecond = 0.8f;
 
     @Override
     public boolean releaseUsing(final ItemStack itemStack, final Level level, final LivingEntity entity, final int remainingTime) {
@@ -72,6 +73,8 @@ public class Flail extends Item {
             FlailHead flailHead = new FlailHead(ModEntityTypes.FLAIL_HEAD, serverLevel);
             flailHead.setOwner(EntityReference.of(user));
             flailHead.setPos(user.position());
+            flailHead.setRotationsPerSecond(rotationsPerSecond);
+            flailHead.setAngle((user.getYRot()+45.0f) * 0.017453f);
             serverLevel.addFreshEntity(flailHead);
             this.activeHead = flailHead;
         }
@@ -80,6 +83,8 @@ public class Flail extends Item {
                     user, Main.USE_FLAIL_ANIMATION);
 
             controller.triggerAnimation(Main.USING_FLAIL_ANIMATION);
+            controller.removeAllModifiers();
+            controller.addModifierLast(new SpeedModifier(rotationsPerSecond));
         }
 
         return InteractionResult.CONSUME;

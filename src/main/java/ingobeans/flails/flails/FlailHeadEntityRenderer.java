@@ -44,8 +44,19 @@ public class FlailHeadEntityRenderer
         if (state.orbitPos != null) {
             EntityRenderState.LeashState l = new EntityRenderState.LeashState();
             l.start = new Vec3(state.x,state.y,state.z);
-            l.end = state.orbitPos.add(0.5f,0.7f,0.0f);
             l.offset = new Vec3(0.0f,1.0f,0.0f);
+
+            Vec3 heightOffset = new Vec3(0.0f,1.1f,0.0f);
+            float armOffsetLength = 0.5f;
+            Vec3 armOffset = new Vec3(Math.cos(state.playerYaw + 3.14f) * armOffsetLength,0.0f,Math.sin(state.playerYaw + 3.14f) * armOffsetLength);
+            /*float armAngleOffsetLength = 0.1f;
+            Vec3 armAngleOffset = new Vec3(
+                    Math.cos(state.playerYaw+state.angle-0.7854f+3.14f) * armAngleOffsetLength,
+                    0.0f,
+                    Math.sin(state.playerYaw+state.angle-0.7854f+3.14f) * armAngleOffsetLength
+            );*/
+
+            l.end = state.orbitPos.add(heightOffset).add(armOffset);//.add(armAngleOffset);
             submitNodeCollector.submitLeash(poseStack, l);
         }
 

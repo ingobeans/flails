@@ -1,5 +1,8 @@
 package ingobeans.flails.flails;
 
+import com.zigythebird.playeranim.animation.PlayerAnimationController;
+import com.zigythebird.playeranim.api.PlayerAnimationAccess;
+import com.zigythebird.playeranimcore.animation.layered.modifier.SpeedModifier;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -25,7 +28,12 @@ import java.util.Optional;
 public class FlailHead extends Entity {
     private static final EntityDataAccessor<Optional<EntityReference<LivingEntity>>> OWNER =
             SynchedEntityData.defineId(FlailHead.class, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
-    public float angle;
+
+    private static final EntityDataAccessor<Float> ROTATIONS_PER_SECOND =
+            SynchedEntityData.defineId(FlailHead.class, EntityDataSerializers.FLOAT);
+
+    private static final EntityDataAccessor<Float> ANGLE =
+            SynchedEntityData.defineId(FlailHead.class, EntityDataSerializers.FLOAT);
 
     public FlailHead(EntityType<FlailHead> flailHeadEntityType, Level level) {
         super(flailHeadEntityType,level);
@@ -34,6 +42,8 @@ public class FlailHead extends Entity {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder entityData) {
         entityData.define(OWNER, Optional.empty());
+        entityData.define(ROTATIONS_PER_SECOND, 1.0f);
+        entityData.define(ANGLE, 1.0f);
     }
 
     @Override
@@ -42,21 +52,33 @@ public class FlailHead extends Entity {
     }
 
     @Override
-    protected void readAdditionalSaveData(ValueInput input) {
+    protected void addAdditionalSaveData(ValueOutput valueOutput) {
+        valueOutput.putFloat("rotations_per_second", entityData.get(ROTATIONS_PER_SECOND));
+        valueOutput.putFloat("angle", entityData.get(ANGLE));
+    }
 
+    @Override
+    protected void readAdditionalSaveData(ValueInput valueInput) {
+        entityData.set(ROTATIONS_PER_SECOND,valueInput.getFloatOr("rotations_per_second",0.0f));
+        entityData.set(ANGLE,valueInput.getFloatOr("angle",0.0f));
     }
 
     public void setOwner(EntityReference<LivingEntity> owner) {
         entityData.set(OWNER, Optional.of(owner));
     }
+    public void setRotationsPerSecond(float rotationsPerSecond) {
+        entityData.set(ROTATIONS_PER_SECOND, rotationsPerSecond);
+    }
+    public void setAngle(float angle) {
+        entityData.set(ANGLE, angle);
+    }
+    public float getAngle() {
+        return entityData.get(ANGLE);
+    }
     public Optional<EntityReference<LivingEntity>> getOwner() {
         return entityData.get(OWNER);
     }
 
-    @Override
-    protected void addAdditionalSaveData(ValueOutput output) {
-
-    }
     @Override
     public void tick() {
         super.tick();
@@ -84,8 +106,10 @@ public class FlailHead extends Entity {
         }
         orbitPos = owner.position();
         float range = 3.0f;
-        this.angle -= 0.2f;
-        Vec3 newPos = orbitPos.add(new Vec3(Math.cos(this.angle) * range,0.0f,Math.sin(this.angle) * range));
+        float angle = entityData.get(ANGLE);
+        angle -= 0.314f * entityData.get(ROTATIONS_PER_SECOND);
+        Vec3 newPos = orbitPos.add(new Vec3(Math.cos(angle) * range,0.0f,Math.sin(angle) * range));
+        entityData.set(ANGLE,angle);
         this.setPos(newPos);
     }
 
