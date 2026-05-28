@@ -12,6 +12,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 
 import static com.zigythebird.playeranim.PlayerAnimLibMod.ANIMATION_LAYER_ID;
@@ -56,6 +57,12 @@ public class Flail extends Item {
         }*/
 
     }
+
+    @Override
+    public int getUseDuration(final ItemStack itemStack, final LivingEntity user) {
+        return 72000;
+    }
+
     @Override
     public InteractionResult use(Level level, Player user, InteractionHand hand) {
         user.startUsingItem(hand);
