@@ -13,10 +13,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityReference;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
@@ -111,6 +108,16 @@ public class FlailHead extends Entity {
         Vec3 newPos = orbitPos.add(new Vec3(Math.cos(angle) * range,0.0f,Math.sin(angle) * range));
         entityData.set(ANGLE,angle);
         this.setPos(newPos);
+
+        if (l instanceof ServerLevel level && this.isAlive()) {
+            for (LivingEntity entity : l
+                    .getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.3), target -> true)) {
+                if (entity.isAlive()) {
+                    Main.LOGGER.info("HIT ENTITY!!" + entity.toString());
+                    entity.hurtServer(level,level.damageSources().mace((Entity)owner),4.0f);
+                }
+            }
+        }
     }
 
     public static class FlailHeadEntityModel extends EntityModel<FlailHeadRenderState> {
