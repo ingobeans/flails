@@ -12,7 +12,7 @@ public class Client implements ClientModInitializer {
         ModEntityModelLayers.registerModelLayers();
         EntityRenderers.register(ModEntityTypes.FLAIL_HEAD, FlailHeadEntityRenderer::new);
         Main.LOGGER.info("client load :3");
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(Main.USE_FLAIL_ANIMATION, 1000,
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(Main.USING_FLAIL_ANIMATION, 1000,
                 player -> new PlayerAnimationController(player,
                         (controller, state, animSetter) -> PlayState.STOP
                 )

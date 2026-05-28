@@ -8,6 +8,8 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -110,11 +112,19 @@ public class FlailHead extends Entity {
         this.setPos(newPos);
 
         if (l instanceof ServerLevel level && this.isAlive()) {
-            for (LivingEntity entity : l
+            for (LivingEntity entity : level
                     .getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.3), target -> true)) {
                 if (entity.isAlive()) {
-                    Main.LOGGER.info("HIT ENTITY!!" + entity.toString());
-                    entity.hurtServer(level,level.damageSources().mace((Entity)owner),4.0f);
+                    Main.LOGGER.info("HIT ENTITY!!" + entity.toString());;
+                    // damage source not working >:3
+
+                    /*DamageSource damageSource = new DamageSource(
+                            level.registryAccess()
+                                    .lookupOrThrow(Registries.DAMAGE_TYPE)
+                                    .get(Main.FLAIL_DAMAGE.identifier()).orElseThrow()
+                    );
+
+                    entity.hurtServer(level,damageSource,4.0f);*/
                 }
             }
         }

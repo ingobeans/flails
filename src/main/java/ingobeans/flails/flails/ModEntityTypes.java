@@ -13,7 +13,7 @@ import net.minecraft.world.entity.MobCategory;
 public class ModEntityTypes {
     public static final EntityType<FlailHead> FLAIL_HEAD = register(
             "flail_head",
-            EntityType.Builder.<FlailHead>of(FlailHead::new, MobCategory.MISC)
+            EntityType.Builder.of(FlailHead::new, MobCategory.MISC)
                     .sized(0.5f, 0.5f)
     );
 

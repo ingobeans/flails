@@ -32,7 +32,7 @@ public class Flail extends Item {
         } else {
             if (entity instanceof Player user) {
                 PlayerAnimationController controller = (PlayerAnimationController) PlayerAnimationAccess.getPlayerAnimationLayer(
-                        user, Main.USE_FLAIL_ANIMATION);
+                        user, Main.USING_FLAIL_ANIMATION);
                 controller.stop();
             }
         }
@@ -59,6 +59,7 @@ public class Flail extends Item {
 
     }
 
+
     @Override
     public int getUseDuration(final ItemStack itemStack, final LivingEntity user) {
         return 72000;
@@ -80,7 +81,7 @@ public class Flail extends Item {
         }
         else {
             PlayerAnimationController controller = (PlayerAnimationController) PlayerAnimationAccess.getPlayerAnimationLayer(
-                    user, Main.USE_FLAIL_ANIMATION);
+                    user, Main.USING_FLAIL_ANIMATION);
 
             controller.triggerAnimation(Main.USING_FLAIL_ANIMATION);
             controller.removeAllModifiers();

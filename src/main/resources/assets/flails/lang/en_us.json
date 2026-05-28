@@ -1,3 +1,4 @@
 {
-  "item.flails.flail": "Flail"
+  "item.flails.flail": "Flail",
+  "death.attack.flail": "%1$s was flailed."
 }
