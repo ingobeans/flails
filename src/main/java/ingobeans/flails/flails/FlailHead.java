@@ -115,16 +115,12 @@ public class FlailHead extends Entity {
             for (LivingEntity entity : level
                     .getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.3), target -> true)) {
                 if (entity.isAlive()) {
-                    Main.LOGGER.info("HIT ENTITY!!" + entity.toString());;
-                    // damage source not working >:3
-
-                    /*DamageSource damageSource = new DamageSource(
+                    DamageSource damageSource = new DamageSource(
                             level.registryAccess()
                                     .lookupOrThrow(Registries.DAMAGE_TYPE)
-                                    .get(Main.FLAIL_DAMAGE.identifier()).orElseThrow()
+                                    .get(Main.FLAIL_DAMAGE.identifier()).orElseThrow(),owner
                     );
-
-                    entity.hurtServer(level,damageSource,4.0f);*/
+                    entity.hurtServer(level,damageSource,5.0f);
                 }
             }
         }
