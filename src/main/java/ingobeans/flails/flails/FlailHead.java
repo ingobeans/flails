@@ -78,6 +78,7 @@ public class FlailHead extends Entity {
         return entityData.get(OWNER);
     }
 
+
     @Override
     public void tick() {
         super.tick();

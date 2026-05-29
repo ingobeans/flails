@@ -20,6 +20,8 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 
@@ -37,6 +39,21 @@ public class FlailHeadEntityRenderer
         super(context);
         this.model = new FlailHead.FlailHeadEntityModel(context.bakeLayer(ModEntityModelLayers.FLAIL_HEAD));
         this.chainModel = new ChainModel(context.bakeLayer(ModEntityModelLayers.FLAIL_CHAIN));
+    }
+
+    @Override
+    protected AABB getBoundingBoxForCulling(FlailHead entity) {
+        AABB entityBB = super.getBoundingBoxForCulling(entity);
+        LivingEntity owner = entity.getOwner().get().getEntity(entity.level(), LivingEntity.class);
+        AABB ownerBB = owner.getBoundingBox();
+        double minX = Math.min(ownerBB.minX,entityBB.minX);
+        double minY = Math.min(ownerBB.minY,entityBB.minY);
+        double minZ = Math.min(ownerBB.minZ,entityBB.minZ);
+        double maxX = Math.max(ownerBB.maxX,entityBB.maxX);
+        double maxY = Math.max(ownerBB.maxY,entityBB.maxY);
+        double maxZ = Math.max(ownerBB.maxZ,entityBB.maxZ);
+
+        return new AABB(minX,minY,minZ,maxX,maxY,maxZ);
     }
 
     public void submit(final FlailHeadRenderState state, final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final CameraRenderState camera) {
