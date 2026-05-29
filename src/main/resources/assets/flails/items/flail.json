@@ -19,11 +19,11 @@
       "type": "minecraft:condition",
       "on_false": {
         "type": "minecraft:model",
-        "model": "flails:item/flail_3d"
+        "model": "flails:item/flail_in_hand"
       },
       "on_true": {
         "type": "minecraft:model",
-        "model": "flails:item/flail_3d"
+        "model": "flails:item/flail_using"
       },
       "property": "minecraft:using_item"
     },
