@@ -57,23 +57,22 @@ public class FlailHeadEntityRenderer
                     0.0f,
                     Math.sin(state.playerYaw+state.angle-0.7854f+3.14f) * armAngleOffsetLength
             );*/
-
-
             Vec3 start = new Vec3(state.x,state.y+1.0f,state.z);
             Vec3 end = state.orbitPos.add(heightOffset).add(armOffset);
             Vec3 offset = new Vec3(0.0f,1.0f,0.0f);
 
             // figure out all chain links that need to be added
             Vec3 delta = end.subtract(start);
-            int stepAmount = 14;//(int)Math.ceil(delta.length() / 0.375f);
+            int stepAmount = (int)Math.ceil(state.orbitPos.add(heightOffset).subtract(start).length() / 0.375f);
             Vec3 step = delta.scale(1.0f / (float)stepAmount);
             Main.LOGGER.info("stepAmount:{}, stepVector:{}", stepAmount, step);
+
             RenderType chainRenderType = this.chainModel.renderType(CHAIN_TEXTURE);
 
             float angleY = (float) Math.atan2(delta.z(), delta.x()) - 1.57f;
             poseStack.popPose();
-            for (int i = -2; i < stepAmount-2; i++) {
-                Vec3 pos = step.scale(i).add(offset);
+            for (int i = 3; i < stepAmount+3; i++) {
+                Vec3 pos = step.scale(-i).add(offset).add(delta);
                 poseStack.pushPose();
 
                 // i have no clue why the pivot Y needs to be offset by 0.5, and it took me two days to figure it out (through trial and error).
