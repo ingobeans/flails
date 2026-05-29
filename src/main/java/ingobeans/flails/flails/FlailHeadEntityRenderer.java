@@ -61,8 +61,8 @@ public class FlailHeadEntityRenderer
         RenderType renderType = this.model.renderType(TEXTURE);
         int tintedColor = -1;
         int overlayCoords = OverlayTexture.pack(OverlayTexture.u(0.0f), OverlayTexture.v(false));
-        submitNodeCollector.submitModel(this.model, state, poseStack, renderType, state.lightCoords, overlayCoords, tintedColor, null, state.outlineColor,null);
-
+        int lightCoords = 15728640;
+        submitNodeCollector.submitModel(this.model, state, poseStack, renderType, lightCoords, overlayCoords, tintedColor, null, state.outlineColor,null);
 
         if (state.orbitPos != null) {
             Vec3 heightOffset = new Vec3(0.0f,1.9f,0.0f);
@@ -78,7 +78,7 @@ public class FlailHeadEntityRenderer
             Vec3 end = state.orbitPos.add(heightOffset).add(armOffset);
             Vec3 offset = new Vec3(0.0f,1.0f,0.0f);
 
-            // figure out all chain links that need to be added
+            // figure out all chain links that need to be rendered
             Vec3 delta = end.subtract(start);
             int stepAmount = (int)Math.ceil(state.orbitPos.add(heightOffset).subtract(start).length() / 0.375f);
             Vec3 step = delta.scale(1.0f / (float)stepAmount);
@@ -95,7 +95,7 @@ public class FlailHeadEntityRenderer
                 // don't blame me
                 poseStack.rotateAround(new Quaternionf().rotateXYZ(1.57f, 0, angleY),(float)pos.x,(float)pos.y+0.5f,(float)pos.z);
                 poseStack.translate(pos.x,pos.y,pos.z);
-                submitNodeCollector.submitModel(this.chainModel, state, poseStack, chainRenderType, state.lightCoords, overlayCoords, tintedColor, null, state.outlineColor,null);
+                submitNodeCollector.submitModel(this.chainModel, state, poseStack, chainRenderType, lightCoords, overlayCoords, tintedColor, null, state.outlineColor,null);
                 poseStack.popPose();
             }
         }
