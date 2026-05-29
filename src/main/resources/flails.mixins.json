@@ -6,7 +6,6 @@
   ],
   "client": [
     "ItemModelResolverMixin",
-    "RenderStateMixin",
     "ItemInHandRendererMixin"
   ],
   "injectors": {

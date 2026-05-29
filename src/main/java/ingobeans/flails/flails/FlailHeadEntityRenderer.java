@@ -107,5 +107,14 @@ public class FlailHeadEntityRenderer
     public FlailHeadRenderState createRenderState() {
         return new FlailHeadRenderState();
     }
+    @Override
+    public void extractRenderState(final FlailHead entity, final FlailHeadRenderState state, final float partialTicks) {
+        super.extractRenderState(entity,state,partialTicks);
+
+        LivingEntity owner = entity.getOwner().get().getEntity(entity.level(), LivingEntity.class);
+        state.orbitPos = owner.position();
+        state.playerYaw = owner.yBodyRot * 0.017453f;
+        state.angle = entity.getAngle();
+    }
 
 }
