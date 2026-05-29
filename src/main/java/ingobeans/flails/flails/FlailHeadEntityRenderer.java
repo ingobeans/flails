@@ -65,7 +65,6 @@ public class FlailHeadEntityRenderer
             Vec3 delta = end.subtract(start);
             int stepAmount = (int)Math.ceil(state.orbitPos.add(heightOffset).subtract(start).length() / 0.375f);
             Vec3 step = delta.scale(1.0f / (float)stepAmount);
-            Main.LOGGER.info("stepAmount:{}, stepVector:{}", stepAmount, step);
 
             RenderType chainRenderType = this.chainModel.renderType(CHAIN_TEXTURE);
 

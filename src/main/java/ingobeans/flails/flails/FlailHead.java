@@ -1,19 +1,15 @@
 package ingobeans.flails.flails;
 
-import com.zigythebird.playeranim.animation.PlayerAnimationController;
-import com.zigythebird.playeranim.api.PlayerAnimationAccess;
-import com.zigythebird.playeranimcore.animation.layered.modifier.SpeedModifier;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.entity.state.EntityRenderState;
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -28,11 +24,10 @@ public class FlailHead extends Entity {
     private static final EntityDataAccessor<Optional<EntityReference<LivingEntity>>> OWNER =
             SynchedEntityData.defineId(FlailHead.class, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
 
-    private static final EntityDataAccessor<Float> ROTATIONS_PER_SECOND =
-            SynchedEntityData.defineId(FlailHead.class, EntityDataSerializers.FLOAT);
-
-    private static final EntityDataAccessor<Float> ANGLE =
-            SynchedEntityData.defineId(FlailHead.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> ROTATIONS_PER_SECOND = SynchedEntityData.defineId(FlailHead.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> ANGLE = SynchedEntityData.defineId(FlailHead.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> RADIUS = SynchedEntityData.defineId(FlailHead.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> TARGET_RADIUS = SynchedEntityData.defineId(FlailHead.class, EntityDataSerializers.FLOAT);
 
     public FlailHead(EntityType<FlailHead> flailHeadEntityType, Level level) {
         super(flailHeadEntityType,level);
@@ -43,6 +38,8 @@ public class FlailHead extends Entity {
         entityData.define(OWNER, Optional.empty());
         entityData.define(ROTATIONS_PER_SECOND, 1.0f);
         entityData.define(ANGLE, 1.0f);
+        entityData.define(RADIUS, 3.0f);
+        entityData.define(TARGET_RADIUS, 3.0f);
     }
 
     @Override
@@ -70,6 +67,9 @@ public class FlailHead extends Entity {
     }
     public void setAngle(float angle) {
         entityData.set(ANGLE, angle);
+    }
+    public void setTargetRadius(float angle) {
+        entityData.set(TARGET_RADIUS, angle);
     }
     public float getAngle() {
         return entityData.get(ANGLE);
@@ -104,10 +104,19 @@ public class FlailHead extends Entity {
             return;
         }
         orbitPos = owner.position();
-        float range = 3.0f;
+        float radius = entityData.get(RADIUS);
+        float targetRadius = entityData.get(TARGET_RADIUS);
+        /*if (owner.isCrouching()) {
+            entityData.set(TARGET_RADIUS,6.0f);
+        } else {
+            entityData.set(TARGET_RADIUS,3.0f);
+        }*/
+        if (targetRadius != radius) {
+            entityData.set(RADIUS,Mth.lerp(0.25f,radius,targetRadius));
+        }
         float angle = entityData.get(ANGLE);
         angle -= 0.314f * entityData.get(ROTATIONS_PER_SECOND);
-        Vec3 newPos = orbitPos.add(new Vec3(Math.cos(angle) * range,0.0f,Math.sin(angle) * range));
+        Vec3 newPos = orbitPos.add(new Vec3(Math.cos(angle) * radius,0.0f,Math.sin(angle) * radius));
         entityData.set(ANGLE,angle);
         this.setPos(newPos);
 
