@@ -71,6 +71,9 @@ public class FlailHead extends Entity {
     public void setTargetRadius(float angle) {
         entityData.set(TARGET_RADIUS, angle);
     }
+    public void setRadius(float angle) {
+        entityData.set(RADIUS, angle);
+    }
     public float getAngle() {
         return entityData.get(ANGLE);
     }
@@ -106,14 +109,37 @@ public class FlailHead extends Entity {
         }
         orbitPos = owner.position();
         float radius = entityData.get(RADIUS);
-        float targetRadius = entityData.get(TARGET_RADIUS);
+        float targetRadius;
+
+        // if an entity is closer than radius, change target radius to move
+        boolean shouldMoveRadiusLower = false;
+        float moveRadiusLower=9999.0f;
+        if (l instanceof ServerLevel level && this.isAlive()) {
+            for (LivingEntity entity : level
+                    .getEntitiesOfClass(LivingEntity.class, owner.getBoundingBox().inflate(radius,0.5f,radius), target -> target!=owner)) {
+                if (entity.position().distanceTo(owner.position()) < radius) {
+                    float distance = (float)entity.position().distanceTo(owner.position());
+                    moveRadiusLower = Math.min(moveRadiusLower,distance);
+                    shouldMoveRadiusLower = true;
+                }
+            }
+        }
+
+        if (shouldMoveRadiusLower) {
+            targetRadius = moveRadiusLower;
+            entityData.set(TARGET_RADIUS,targetRadius);
+        } else {
+            targetRadius = 3.0f;
+        }
+
         /*if (owner.isCrouching()) {
             entityData.set(TARGET_RADIUS,6.0f);
         } else {
             entityData.set(TARGET_RADIUS,3.0f);
         }*/
         if (targetRadius != radius) {
-            entityData.set(RADIUS,Mth.lerp(0.25f,radius,targetRadius));
+            radius = Mth.lerp(0.25f,radius,targetRadius);
+            entityData.set(RADIUS,radius);
         }
         float angle = entityData.get(ANGLE);
         angle -= 0.314f * entityData.get(ROTATIONS_PER_SECOND);

@@ -24,6 +24,7 @@ public class Flail extends Item {
     }
     public FlailHead activeHead;
     public float rotationsPerSecond = 0.8f;
+    public float radius = 3.0f;
 
     @Override
     public boolean releaseUsing(final ItemStack itemStack, final Level level, final LivingEntity entity, final int remainingTime) {
@@ -76,6 +77,8 @@ public class Flail extends Item {
             flailHead.setPos(user.position());
             flailHead.setRotationsPerSecond(rotationsPerSecond);
             flailHead.setAngle((user.getYRot()+45.0f) * 0.017453f);
+            flailHead.setRadius(0.0f);
+            flailHead.setTargetRadius(this.radius);
             serverLevel.addFreshEntity(flailHead);
             this.activeHead = flailHead;
         }
