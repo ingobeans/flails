@@ -18,6 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.UseEffects;
 import net.minecraft.world.level.Level;
@@ -42,6 +43,14 @@ public class Flail extends Item {
                                 EquipmentSlotGroup.MAINHAND
                         )
                 .build());
+    }
+
+    public void cancelUsing(LivingEntity entity) {
+        if (entity instanceof Player user) {
+            PlayerAnimationController controller = (PlayerAnimationController) PlayerAnimationAccess.getPlayerAnimationLayer(
+                    user, Main.USING_FLAIL_ANIMATION);
+            controller.stop();
+        }
     }
 
     @Override
