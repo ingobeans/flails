@@ -1,5 +1,6 @@
 {
   "item.flails.flail": "Flail",
   "death.attack.flail": "%1$s was flailed by %2$s",
-  "death.attack.flail.item": "%1$s was flailed by %2$s with %3$s"
+  "death.attack.flail.item": "%1$s was flailed by %2$s with %3$s",
+  "enchantment.flails.crushing": "Crushing"
 }

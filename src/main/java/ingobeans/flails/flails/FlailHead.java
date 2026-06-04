@@ -13,6 +13,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -96,9 +98,10 @@ public class FlailHead extends Entity {
             this.discard();
             return;
         }
-        if (owner.getUseItem().getItem() instanceof Flail flail) {
+        ItemStack useItem = owner.getUseItem();
+        if (useItem.getItem() instanceof Flail flail) {
             if (!l.isClientSide()) {
-                if (flail.activeHead != this) {
+                if (!useItem.getOrDefault(Flail.ACTIVE_FLAIL_HEAD_COMPONENT, "").equals(this.getStringUUID())) {
                     this.discard();
                     return;
                 }
@@ -109,7 +112,7 @@ public class FlailHead extends Entity {
         }
         orbitPos = owner.position();
         float radius = entityData.get(RADIUS);
-        float targetRadius;
+        float targetRadius = entityData.get(TARGET_RADIUS);;
 
         // if an entity is closer than radius, change target radius to move
         boolean shouldMoveRadiusLower = false;
@@ -123,20 +126,19 @@ public class FlailHead extends Entity {
                     shouldMoveRadiusLower = true;
                 }
             }
+            float newTarget;
+            if (shouldMoveRadiusLower) {
+                newTarget = moveRadiusLower;
+            } else {
+                newTarget = 3.0f;
+            }
+            if (newTarget != targetRadius) {
+                entityData.set(TARGET_RADIUS,newTarget);
+                targetRadius = newTarget;
+            }
         }
 
-        if (shouldMoveRadiusLower) {
-            targetRadius = moveRadiusLower;
-            entityData.set(TARGET_RADIUS,targetRadius);
-        } else {
-            targetRadius = 3.0f;
-        }
 
-        /*if (owner.isCrouching()) {
-            entityData.set(TARGET_RADIUS,6.0f);
-        } else {
-            entityData.set(TARGET_RADIUS,3.0f);
-        }*/
         if (targetRadius != radius) {
             radius = Mth.lerp(0.25f,radius,targetRadius);
             entityData.set(RADIUS,radius);
@@ -149,7 +151,7 @@ public class FlailHead extends Entity {
 
         if (l instanceof ServerLevel level && this.isAlive()) {
             for (LivingEntity entity : level
-                    .getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.3), target -> true)) {
+                    .getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.3), target -> target != owner)) {
                 if (entity.isAlive()) {
                     DamageSource damageSource = new DamageSource(
                             level.registryAccess()
@@ -157,6 +159,7 @@ public class FlailHead extends Entity {
                                     .get(Main.FLAIL_DAMAGE.identifier()).orElseThrow(),owner
                     );
                     entity.hurtServer(level,damageSource,5.0f);
+                    EnchantmentHelper.doPostAttackEffects(level, entity, damageSource);
                 }
             }
         }

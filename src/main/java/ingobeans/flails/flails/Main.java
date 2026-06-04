@@ -21,6 +21,7 @@ public class Main implements ModInitializer {
 	public void onInitialize() {
         ModItems.initialize();
         ModEntityTypes.registerModEntityTypes();
+        ModEnchantmentEffects.registerModEnchantmentEffects();
         LOGGER.info("flails loaded!!!!");
 	}
 }
