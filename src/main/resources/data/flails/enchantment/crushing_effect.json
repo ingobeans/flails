@@ -29,8 +29,7 @@
     "per_level_above_first": 10
   },
   "slots": [
-    "hand"
   ],
-  "supported_items": "#minecraft:enchantable/weapon",
+  "supported_items": "flails:flail",
   "weight": 10
 }

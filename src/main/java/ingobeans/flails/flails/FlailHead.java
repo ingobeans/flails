@@ -1,9 +1,12 @@
 package ingobeans.flails.flails;
 
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -14,13 +17,16 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.*;
+import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Optional;
+
+import static net.minecraft.world.item.enchantment.EnchantmentHelper.runIterationOnEquipment;
 
 public class FlailHead extends Entity {
     private static final EntityDataAccessor<Optional<EntityReference<LivingEntity>>> OWNER =
@@ -159,7 +165,21 @@ public class FlailHead extends Entity {
                                     .get(Main.FLAIL_DAMAGE.identifier()).orElseThrow(),owner
                     );
                     entity.hurtServer(level,damageSource,5.0f);
-                    EnchantmentHelper.doPostAttackEffects(level, entity, damageSource);
+
+                    // manually apply enchantment effects
+                    if (!useItem.isEmpty()) {
+                        ItemEnchantments itemEnchantments = useItem.get(DataComponents.ENCHANTMENTS);
+                        if (itemEnchantments != null && !itemEnchantments.isEmpty()) {
+                            EnchantedItemInUse itemInUse = new EnchantedItemInUse(useItem, EquipmentSlot.MAINHAND, owner);
+
+                            for (Object2IntMap.Entry<Holder<Enchantment>> entry : itemEnchantments.entrySet()) {
+                                Holder<Enchantment> enchantment = (Holder<Enchantment>)entry.getKey();
+                                for (TargetedConditionalEffect<EnchantmentEntityEffect> effect : enchantment.value().getEffects(EnchantmentEffectComponents.POST_ATTACK)) {
+                                    effect.effect().apply(level,entry.getIntValue(),itemInUse,entity,entity.position());
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

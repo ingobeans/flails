@@ -15,6 +15,6 @@ public class ModEnchantmentEffects {
     }
 
     public static void registerModEnchantmentEffects() {
-        Main.LOGGER.info("Registering EnchantmentEffects for" + Main.MOD_ID);
+        Main.LOGGER.info("registered enchantments :3");
     }
 }
