@@ -1,6 +1,7 @@
 package ingobeans.flails.flails;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -22,6 +23,7 @@ public class Main implements ModInitializer {
         ModItems.initialize();
         ModEntityTypes.registerModEntityTypes();
         ModEnchantmentEffects.registerModEnchantmentEffects();
+        PayloadTypeRegistry.clientboundPlay().register(UpdateFlailAnimationPacket.TYPE, UpdateFlailAnimationPacket.CODEC);
         LOGGER.info("flails loaded!!!!");
 	}
 }

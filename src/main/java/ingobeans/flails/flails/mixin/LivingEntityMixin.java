@@ -26,7 +26,7 @@ public class LivingEntityMixin {
     @Inject(method = "stopUsingItem", at = @At(value = "HEAD"))
     public void stopUsingItem(CallbackInfo info) {
         LivingEntity thisEntity = (LivingEntity)(Object)this;
-        if (thisEntity.level().isClientSide() && thisEntity.isUsingItem()) {
+        if (thisEntity.isUsingItem()) {
             if (thisEntity.getUseItem().getItem() instanceof Flail flail) {
                 flail.cancelUsing(thisEntity);
             }

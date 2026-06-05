@@ -26,8 +26,6 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Optional;
 
-import static net.minecraft.world.item.enchantment.EnchantmentHelper.runIterationOnEquipment;
-
 public class FlailHead extends Entity {
     private static final EntityDataAccessor<Optional<EntityReference<LivingEntity>>> OWNER =
             SynchedEntityData.defineId(FlailHead.class, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);

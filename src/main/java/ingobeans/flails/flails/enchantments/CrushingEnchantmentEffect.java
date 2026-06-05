@@ -2,6 +2,8 @@ package ingobeans.flails.flails.enchantments;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.zigythebird.playeranim.animation.PlayerAnimationController;
+import com.zigythebird.playeranim.api.PlayerAnimationAccess;
 import ingobeans.flails.flails.Main;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -30,7 +32,6 @@ public record CrushingEnchantmentEffect(LevelBasedValue amount) implements Encha
     public void apply(ServerLevel serverLevel, int level, EnchantedItemInUse context, Entity target, Vec3 pos) {
         if (target instanceof LivingEntity victim) {
             if (context.owner() != null && context.owner() instanceof Player player) {
-                Main.LOGGER.info("cvurhs!");
                 ItemStack itemBlockingWith = victim.getItemBlockingWith();
                 if (itemBlockingWith != null) {
                     BlocksAttacks blocksAttacks = itemBlockingWith.get(DataComponents.BLOCKS_ATTACKS);

@@ -6,6 +6,8 @@ import com.zigythebird.playeranim.api.PlayerAnimationAccess;
 import com.zigythebird.playeranimcore.animation.layered.modifier.SpeedModifier;
 import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonConfiguration;
 import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonMode;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
@@ -15,6 +17,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -66,10 +69,17 @@ public class Flail extends Item {
     }
 
     public void cancelUsing(LivingEntity entity) {
-        if (entity instanceof Player user) {
-            PlayerAnimationController controller = (PlayerAnimationController) PlayerAnimationAccess.getPlayerAnimationLayer(
-                    user, Main.USING_FLAIL_ANIMATION);
-            controller.stop();
+        if (entity.level() instanceof ServerLevel serverLevel) {
+            UpdateFlailAnimationPacket payload = new UpdateFlailAnimationPacket(0, EntityReference.of(entity));
+            for (ServerPlayer player : PlayerLookup.level((ServerLevel) serverLevel)) {
+                ServerPlayNetworking.send(player, payload);
+            }
+        } else {
+            if (entity instanceof Player user) {
+                PlayerAnimationController controller = (PlayerAnimationController) PlayerAnimationAccess.getPlayerAnimationLayer(
+                        user, Main.USING_FLAIL_ANIMATION);
+                controller.stop();
+            }
         }
     }
 
@@ -81,12 +91,17 @@ public class Flail extends Item {
         return level.getEntity(UUID.fromString(uuid));
     }
 
-    @Override
+    /*@Override
     public boolean releaseUsing(final ItemStack itemStack, final Level level, final LivingEntity entity, final int remainingTime) {
         if (level instanceof ServerLevel serverLevel) {
             Entity activeHead = this.getFlailHead(itemStack,serverLevel);
             if (activeHead != null) {
                 activeHead.discard();
+            }
+
+            UpdateFlailAnimationPacket payload = new UpdateFlailAnimationPacket(0, EntityReference.of(entity));
+            for (ServerPlayer player : PlayerLookup.level((ServerLevel) level)) {
+                ServerPlayNetworking.send(player, payload);
             }
         } else {
             if (entity instanceof Player user) {
@@ -96,7 +111,7 @@ public class Flail extends Item {
             }
         }
         return false;
-    }
+    }*/
 
     @Override
     public void onUseTick(final Level level, final LivingEntity livingEntity, final ItemStack itemStack, final int ticksRemaining) {
@@ -139,6 +154,11 @@ public class Flail extends Item {
             flailHead.setTargetRadius(this.radius);
             serverLevel.addFreshEntity(flailHead);
             user.getItemInHand(hand).set(ACTIVE_FLAIL_HEAD_COMPONENT, flailHead.getStringUUID());
+
+            UpdateFlailAnimationPacket payload = new UpdateFlailAnimationPacket(1, EntityReference.of(user));
+            for (ServerPlayer player : PlayerLookup.level((ServerLevel) level)) {
+                ServerPlayNetworking.send(player, payload);
+            }
         }
         else {
             PlayerAnimationController controller = (PlayerAnimationController) PlayerAnimationAccess.getPlayerAnimationLayer(

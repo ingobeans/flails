@@ -17,8 +17,10 @@ public class LocalPlayerMixin {
     @Inject(method = "drop", at = @At(value = "HEAD"))
     public void drop(final boolean all, CallbackInfoReturnable<Boolean> cir) {
         LocalPlayer thisPlayer = (LocalPlayer)(Object)this;
-        if (thisPlayer.getInventory().getSelectedItem().getItem() instanceof Flail flail) {
-            flail.cancelUsing(thisPlayer);
+        if (thisPlayer.isUsingItem()) {
+            if (thisPlayer.getInventory().getSelectedItem().getItem() instanceof Flail flail) {
+                flail.cancelUsing(thisPlayer);
+            }
         }
     }
 }
