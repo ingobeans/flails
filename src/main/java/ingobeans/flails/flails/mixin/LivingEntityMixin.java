@@ -32,19 +32,4 @@ public class LivingEntityMixin {
             }
         }
     }
-    /*@Inject(method = "getSecondsToDisableBlocking", at = @At(value = "HEAD"))
-    public void getSecondsToDisableBlocking(CallbackInfoReturnable<Float> cir) {
-        LivingEntity thisEntity = (LivingEntity)(Object)this;
-        ItemStack weaponItem = thisEntity.getWeaponItem();
-        Main.LOGGER.info("WA");
-        if (weaponItem.getItem() instanceof Flail flail) {
-
-            ItemEnchantments itemEnchantments = weaponItem.get(DataComponents.ENCHANTMENTS);
-            if (itemEnchantments != null && !itemEnchantments.isEmpty()) {
-                for (Object2IntMap.Entry<Holder<Enchantment>> entry : itemEnchantments.entrySet()) {
-                    Main.LOGGER.info(entry.toString());
-                }
-            }
-        }
-    }*/
 }
