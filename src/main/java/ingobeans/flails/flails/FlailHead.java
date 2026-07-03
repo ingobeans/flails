@@ -15,6 +15,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.*;
@@ -162,6 +163,8 @@ public class FlailHead extends Entity {
                                     .lookupOrThrow(Registries.DAMAGE_TYPE)
                                     .get(Main.FLAIL_DAMAGE.identifier()).orElseThrow(),owner
                     );
+
+                    Vec3 oldMovement = entity.getDeltaMovement();
                     entity.hurtServer(level,damageSource,5.0f);
 
                     // manually apply enchantment effects
@@ -178,9 +181,19 @@ public class FlailHead extends Entity {
                             }
                         }
                     }
+
+
+                    // apply knockback
+                    owner.causeExtraKnockback(entity, getKnockback(owner,entity, damageSource), oldMovement);
                 }
             }
         }
+    }
+    float getKnockback(LivingEntity damager, final Entity target, final DamageSource damageSource) {
+        float knockback = (float)damager.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
+        return damager.level() instanceof ServerLevel level
+                ? EnchantmentHelper.modifyKnockback(level, damager.getWeaponItem(), target, damageSource, knockback) / 2.0F
+                : knockback / 2.0F;
     }
 
     public static class FlailHeadEntityModel extends EntityModel<FlailHeadRenderState> {

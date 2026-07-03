@@ -58,7 +58,7 @@ public class Flail extends Item {
     public void cancelUsing(LivingEntity entity) {
         if (entity.level() instanceof ServerLevel serverLevel) {
             UpdateFlailAnimationPacket payload = new UpdateFlailAnimationPacket(0, EntityReference.of(entity), 0.0f);
-            for (ServerPlayer player : PlayerLookup.level((ServerLevel) serverLevel)) {
+            for (ServerPlayer player : PlayerLookup.level(serverLevel)) {
                 ServerPlayNetworking.send(player, payload);
             }
         } else {
@@ -99,7 +99,7 @@ public class Flail extends Item {
             user.getItemInHand(hand).set(ACTIVE_FLAIL_HEAD_COMPONENT, flailHead.getStringUUID());
 
             UpdateFlailAnimationPacket payload = new UpdateFlailAnimationPacket(1, EntityReference.of(user), rotationsPerSecond);
-            for (ServerPlayer player : PlayerLookup.level((ServerLevel) level)) {
+            for (ServerPlayer player : PlayerLookup.level(serverLevel)) {
                 ServerPlayNetworking.send(player, payload);
             }
         }
