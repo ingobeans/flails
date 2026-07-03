@@ -65,7 +65,7 @@ public class FlailHeadEntityRenderer
         submitNodeCollector.submitModel(this.model, state, poseStack, renderType, lightCoords, overlayCoords, tintedColor, null, state.outlineColor,null);
 
         if (state.orbitPos != null) {
-            Vec3 heightOffset = new Vec3(0.0f,1.9f,0.0f);
+            Vec3 heightOffset = new Vec3(0.0f,0.1f,0.0f);
             float armOffsetLength = 0.5f;
             Vec3 armOffset = new Vec3(Math.cos(state.playerYaw + 3.14f) * armOffsetLength,0.0f,Math.sin(state.playerYaw + 3.14f) * armOffsetLength);
             /*float armAngleOffsetLength = 0.1f;
@@ -112,7 +112,14 @@ public class FlailHeadEntityRenderer
         super.extractRenderState(entity,state,partialTicks);
 
         LivingEntity owner = entity.getOwner().get().getEntity(entity.level(), LivingEntity.class);
-        state.orbitPos = owner.position();
+        state.orbitPos = owner.getEyePosition(partialTicks);
+        if (owner.isVisuallyCrawling() || owner.isFallFlying()) {
+            state.orbitPos = state.orbitPos.subtract(0.0f,1.0f,0.0f);
+            double angle = owner.yBodyRot / 180.0*Math.PI + Math.PI / 2.0;
+            state.orbitPos = state.orbitPos.add(new Vec3(Math.cos(angle),0.0,Math.sin(angle)));
+        }
+
+        Main.LOGGER.info(String.valueOf(owner.isFallFlying()));
         state.playerYaw = owner.yBodyRot * 0.017453f;
         state.angle = entity.getAngle();
     }
