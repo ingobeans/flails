@@ -94,13 +94,17 @@ public class FlailHead extends Entity {
         super.tick();
         Vec3 orbitPos;
         Level l = level();
-        if (!l.isClientSide() && getOwner().isEmpty()) {
-            this.discard();
+        if (getOwner().isEmpty()) {
+            if (!l.isClientSide()) {
+                this.discard();
+            }
             return;
         }
         Player owner = (Player)getOwner().get().getEntity(l, LivingEntity.class);
-        if (!l.isClientSide() && owner == null) {
-            this.discard();
+        if (owner == null) {
+            if (!l.isClientSide()) {
+                this.discard();
+            }
             return;
         }
         ItemStack useItem = owner.getUseItem();

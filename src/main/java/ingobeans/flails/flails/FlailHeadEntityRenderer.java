@@ -49,6 +49,9 @@ public class FlailHeadEntityRenderer
             return entityBB;
         }
         LivingEntity owner = entity.getOwner().get().getEntity(entity.level(), LivingEntity.class);
+        if (owner == null) {
+            return entityBB;
+        }
         AABB ownerBB = owner.getBoundingBox();
         double minX = Math.min(ownerBB.minX,entityBB.minX);
         double minY = Math.min(ownerBB.minY,entityBB.minY);
@@ -122,6 +125,9 @@ public class FlailHeadEntityRenderer
             return;
         }
         LivingEntity owner = entity.getOwner().get().getEntity(entity.level(), LivingEntity.class);
+        if (owner == null) {
+            return;
+        }
         state.orbitPos = owner.getEyePosition(partialTicks);
         if (owner.isVisuallyCrawling() || owner.isFallFlying()) {
             state.orbitPos = state.orbitPos.subtract(0.0f,1.0f,0.0f);
