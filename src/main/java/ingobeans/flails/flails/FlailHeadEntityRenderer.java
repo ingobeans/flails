@@ -44,6 +44,10 @@ public class FlailHeadEntityRenderer
     @Override
     protected AABB getBoundingBoxForCulling(FlailHead entity) {
         AABB entityBB = super.getBoundingBoxForCulling(entity);
+        // no owner check
+        if (entity.getOwner().isEmpty()) {
+            return entityBB;
+        }
         LivingEntity owner = entity.getOwner().get().getEntity(entity.level(), LivingEntity.class);
         AABB ownerBB = owner.getBoundingBox();
         double minX = Math.min(ownerBB.minX,entityBB.minX);
@@ -98,6 +102,8 @@ public class FlailHeadEntityRenderer
                 submitNodeCollector.submitModel(this.chainModel, state, poseStack, chainRenderType, lightCoords, overlayCoords, tintedColor, null, state.outlineColor,null);
                 poseStack.popPose();
             }
+        } else {
+            poseStack.popPose();
         }
 
         super.submit(state, poseStack, submitNodeCollector, camera);
@@ -111,6 +117,10 @@ public class FlailHeadEntityRenderer
     public void extractRenderState(final FlailHead entity, final FlailHeadRenderState state, final float partialTicks) {
         super.extractRenderState(entity,state,partialTicks);
 
+        // no owner check
+        if (entity.getOwner().isEmpty()) {
+            return;
+        }
         LivingEntity owner = entity.getOwner().get().getEntity(entity.level(), LivingEntity.class);
         state.orbitPos = owner.getEyePosition(partialTicks);
         if (owner.isVisuallyCrawling() || owner.isFallFlying()) {
