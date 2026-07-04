@@ -129,7 +129,6 @@ public class FlailHeadEntityRenderer
             state.orbitPos = state.orbitPos.add(new Vec3(Math.cos(angle),0.0,Math.sin(angle)));
         }
 
-        Main.LOGGER.info(String.valueOf(owner.isFallFlying()));
         state.playerYaw = owner.yBodyRot * 0.017453f;
         state.angle = entity.getAngle();
     }
