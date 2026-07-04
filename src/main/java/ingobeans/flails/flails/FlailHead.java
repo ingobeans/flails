@@ -93,27 +93,28 @@ public class FlailHead extends Entity {
     public void tick() {
         super.tick();
         Vec3 orbitPos;
-        if (getOwner().isEmpty()) {
+        Level l = level();
+        if (!l.isClientSide() && getOwner().isEmpty()) {
             this.discard();
             return;
         }
-        Level l = level();
         Player owner = (Player)getOwner().get().getEntity(l, LivingEntity.class);
-        if (owner == null) {
+        if (!l.isClientSide() && owner == null) {
             this.discard();
             return;
         }
         ItemStack useItem = owner.getUseItem();
-        if (useItem.getItem() instanceof Flail flail) {
-            if (!l.isClientSide()) {
+        if (!l.isClientSide()) {
+            if (useItem.getItem() instanceof Flail flail) {
                 if (!useItem.getOrDefault(Flail.ACTIVE_FLAIL_HEAD_COMPONENT, "").equals(this.getStringUUID())) {
                     this.discard();
                     return;
                 }
             }
-        } else {
-            this.discard();
-            return;
+            else {
+                this.discard();
+                return;
+            }
         }
         orbitPos = owner.position();
         float radius = entityData.get(RADIUS);
