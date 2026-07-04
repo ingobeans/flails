@@ -9,7 +9,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityReference;
 
 public record UpdateFlailAnimationPacket(int state, EntityReference entityReference, float speed) implements CustomPacketPayload {
-    public static final Identifier UPDATE_FLAIL_ANIMATION_ID = Identifier.fromNamespaceAndPath(Main.MOD_ID, "summon_lightning");
+    public static final Identifier UPDATE_FLAIL_ANIMATION_ID = Identifier.fromNamespaceAndPath(Main.MOD_ID, "update_flail_animation");
 
     public static final CustomPacketPayload.Type<UpdateFlailAnimationPacket> TYPE = new CustomPacketPayload.Type<>(UPDATE_FLAIL_ANIMATION_ID);
 
