@@ -10,6 +10,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -23,6 +24,9 @@ public class Main implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static Identifier USING_FLAIL_ANIMATION = Identifier.fromNamespaceAndPath(MOD_ID, "using_flail");
     public static final ResourceKey<DamageType> FLAIL_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, Identifier.fromNamespaceAndPath(Main.MOD_ID, "flail"));
+
+    public static final SoundEvent SWING = Registry.register(BuiltInRegistries.SOUND_EVENT, Identifier.fromNamespaceAndPath(MOD_ID, "swing"),
+                    SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(MOD_ID, "swing")));;
 
 	@Override
 	public void onInitialize() {

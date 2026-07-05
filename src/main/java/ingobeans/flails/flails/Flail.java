@@ -13,6 +13,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -88,6 +90,7 @@ public class Flail extends Item {
         user.startUsingItem(hand);
 
         if (level instanceof ServerLevel serverLevel) {
+            serverLevel.playSound(null, user.blockPosition(), SoundEvents.BUNDLE_DROP_CONTENTS, SoundSource.PLAYERS, 0.7f, 1f);
             FlailHead flailHead = new FlailHead(ModEntityTypes.FLAIL_HEAD, serverLevel);
             flailHead.setOwner(EntityReference.of(user));
             flailHead.setPos(user.position());

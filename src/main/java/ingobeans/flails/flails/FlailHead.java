@@ -12,6 +12,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -33,8 +34,10 @@ public class FlailHead extends Entity {
 
     private static final EntityDataAccessor<Float> ROTATIONS_PER_SECOND = SynchedEntityData.defineId(FlailHead.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> ANGLE = SynchedEntityData.defineId(FlailHead.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> ANGLE_OFFSET = SynchedEntityData.defineId(FlailHead.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> RADIUS = SynchedEntityData.defineId(FlailHead.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> TARGET_RADIUS = SynchedEntityData.defineId(FlailHead.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Integer> SPINS = SynchedEntityData.defineId(FlailHead.class, EntityDataSerializers.INT);
 
     public FlailHead(EntityType<FlailHead> flailHeadEntityType, Level level) {
         super(flailHeadEntityType,level);
@@ -45,8 +48,10 @@ public class FlailHead extends Entity {
         entityData.define(OWNER, Optional.empty());
         entityData.define(ROTATIONS_PER_SECOND, 1.0f);
         entityData.define(ANGLE, 1.0f);
+        entityData.define(ANGLE_OFFSET, 1.0f);
         entityData.define(RADIUS, 3.0f);
         entityData.define(TARGET_RADIUS, 3.0f);
+        entityData.define(SPINS, 0);
     }
 
     @Override
@@ -73,6 +78,7 @@ public class FlailHead extends Entity {
         entityData.set(ROTATIONS_PER_SECOND, rotationsPerSecond);
     }
     public void setAngle(float angle) {
+        entityData.set(ANGLE_OFFSET, angle);
         entityData.set(ANGLE, angle);
     }
     public void setTargetRadius(float angle) {
@@ -154,7 +160,15 @@ public class FlailHead extends Entity {
             entityData.set(RADIUS,radius);
         }
         float angle = entityData.get(ANGLE);
+        int oldSpins = entityData.get(SPINS);
         angle -= 0.314f * entityData.get(ROTATIONS_PER_SECOND);
+        int newSpins = (int)((angle-entityData.get(ANGLE_OFFSET)) / 6.283f - 0.25f);
+        if (newSpins != oldSpins) {
+            entityData.set(SPINS,newSpins);
+            if (l instanceof ServerLevel level) {
+                level.playSound(null, owner.blockPosition(), Main.SWING, SoundSource.PLAYERS, 0.25f, 0.95f);
+            }
+        }
         Vec3 newPos = orbitPos.add(new Vec3(Math.cos(angle) * radius,0.0f,Math.sin(angle) * radius));
         entityData.set(ANGLE,angle);
         this.setPos(newPos);
