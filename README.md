@@ -16,6 +16,10 @@ the flail can also be enchanted with knockback.
 
 ![img.png](imgs/img.png)
 
+## ai usage
+
+no ai <3
+
 <hr>
 
 <sup>if you have any critique, i am happy to FLAIL YOU</sup> 
