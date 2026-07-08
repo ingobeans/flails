@@ -6,6 +6,12 @@ you swing the flail around you in an orbit, looking very cool. its really useful
 
 deals as much damage as an iron sword per hit.
 
+## enchanting
+
+this mod also adds a new enchantment, called Crushing. It will cause the flail to break shields on hit, like an axe.
+
+the flail can also be enchanted with knockback.
+
 ## crafting recipe
 
 ![img.png](imgs/img.png)
