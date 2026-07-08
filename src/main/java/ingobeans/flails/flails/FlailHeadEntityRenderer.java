@@ -129,7 +129,7 @@ public class FlailHeadEntityRenderer
             return;
         }
         state.orbitPos = owner.getEyePosition(partialTicks);
-        if (owner.isVisuallyCrawling() || owner.isFallFlying()) {
+        if (owner.isVisuallyCrawling() || owner.isFallFlying() || owner.isVisuallySwimming()) {
             state.orbitPos = state.orbitPos.subtract(0.0f,1.0f,0.0f);
             double angle = owner.yBodyRot / 180.0*Math.PI + Math.PI / 2.0;
             state.orbitPos = state.orbitPos.add(new Vec3(Math.cos(angle),0.0,Math.sin(angle)));
