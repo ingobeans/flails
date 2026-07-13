@@ -16,6 +16,14 @@ the flail can also be enchanted with knockback.
 
 ![img.png](imgs/img.png)
 
+## setup / building
+
+i personally used IntelliJ Idea to develop this, but as long as you have Java and gradle installed you should be able to build.
+
+use the `runClient` gradle task to compile and run the client. you can also use the `build` task to just build the jar.
+
+in intellij idea, as long as you have the minecraft development plugin installed, there should be a button in the top right corner that will do this automatically and run the client.
+
 ## ai usage
 
 no ai <3
