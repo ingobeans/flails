@@ -6,6 +6,8 @@ you swing the flail around you in an orbit, looking very cool. its really useful
 
 deals as much damage as an iron sword per hit.
 
+you can download and try the mod at the [modrinth](https://modrinth.com/mod/flails) page !!
+
 ## enchanting
 
 this mod also adds a new enchantment, called Crushing. It will cause the flail to break shields on hit, like an axe.
